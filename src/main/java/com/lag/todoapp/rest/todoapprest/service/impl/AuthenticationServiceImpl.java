@@ -7,7 +7,8 @@ import com.lag.todoapp.rest.todoapprest.dto.salida.RegisterSalidaDto;
 import com.lag.todoapp.rest.todoapprest.entity.RoleEntity;
 import com.lag.todoapp.rest.todoapprest.entity.UserEntity;
 import com.lag.todoapp.rest.todoapprest.enums.RoleEnum;
-import com.lag.todoapp.rest.todoapprest.exception.RoleException;
+import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
+import com.lag.todoapp.rest.todoapprest.exception.RoleNotFoundException;
 import com.lag.todoapp.rest.todoapprest.mapper.UserMapper;
 import com.lag.todoapp.rest.todoapprest.repository.RoleRepository;
 import com.lag.todoapp.rest.todoapprest.repository.UserRepository;
@@ -16,9 +17,7 @@ import com.lag.todoapp.rest.todoapprest.service.JwtService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,7 +55,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userMapper = userMapper;
     }
 
-
     @Override
     public LoginSalidaDto authenticate(LoginEntradaDto userLogin) throws Exception {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -84,12 +82,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userMapper.toRegisterSalidaDto(createdUser);
     }
 
-    private UserEntity buildUserToRegister(RegisterEntradaDto userRegister) throws RoleException {
+    private UserEntity buildUserToRegister(RegisterEntradaDto userRegister) throws Exception {
         RoleEntity role = roleRepository.findById(userRegister.getRoleId())
-                .orElseThrow(() -> new RoleException("Role Not Found"));
+                .orElseThrow(() -> new RoleNotFoundException("Role Not Found"));
 
         if (role.getRole() == RoleEnum.ADMIN) {
-            throw new RoleException("You attempted to assign an unauthorized role");
+            throw new AccessNotGrantedException("You attempted to assign an unauthorized role");
         }
 
         return UserEntity.builder()

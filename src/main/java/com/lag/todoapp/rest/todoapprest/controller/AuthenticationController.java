@@ -5,6 +5,7 @@ import com.lag.todoapp.rest.todoapprest.dto.entrada.RegisterEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.salida.LoginSalidaDto;
 import com.lag.todoapp.rest.todoapprest.dto.salida.RegisterSalidaDto;
 import com.lag.todoapp.rest.todoapprest.service.AuthenticationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +24,12 @@ public class AuthenticationController {
     }
 
     @PostMapping()
-    public ResponseEntity<LoginSalidaDto> login(@RequestBody LoginEntradaDto userLogin) throws Exception {
+    public ResponseEntity<LoginSalidaDto> login(@Valid @RequestBody LoginEntradaDto userLogin) throws Exception {
         return ResponseEntity.ok(authenticationService.authenticate(userLogin));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterSalidaDto> register(@RequestBody RegisterEntradaDto userRegister) throws Exception {
+    public ResponseEntity<RegisterSalidaDto> register(@Valid @RequestBody RegisterEntradaDto userRegister) throws Exception {
         return ResponseEntity.ok(authenticationService.registerUser(userRegister));
     }
 }
