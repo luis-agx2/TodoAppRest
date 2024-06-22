@@ -9,4 +9,6 @@ public enum RoleEnum {
     private RoleEnum(Long roleId) {
         this.roleId = roleId;
     }
+
+
 }
