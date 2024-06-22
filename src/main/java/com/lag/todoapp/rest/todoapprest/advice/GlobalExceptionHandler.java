@@ -1,5 +1,6 @@
 package com.lag.todoapp.rest.todoapprest.advice;
 
+import com.lag.todoapp.rest.todoapprest.dto.ErrorResponseDto;
 import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
 import com.lag.todoapp.rest.todoapprest.exception.RoleNotFoundException;
 import org.springframework.http.HttpHeaders;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,13 +21,19 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({RoleNotFoundException.class, UsernameNotFoundException.class})
-    public ResponseEntity<String> handleRoleNotFoundException(RoleNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+    public ResponseEntity<ErrorResponseDto> handleRoleNotFoundException(RoleNotFoundException exception) {
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+                .message(exception.getMessage()).code(HttpStatus.NOT_FOUND.value()).build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDto);
     }
 
     @ExceptionHandler(AccessNotGrantedException.class)
-    public ResponseEntity<String> handleAccessNotGrantedException(AccessNotGrantedException exception) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exception.getMessage());
+    public ResponseEntity<ErrorResponseDto> handleAccessNotGrantedException(AccessNotGrantedException exception) {
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+                .message(exception.getMessage()).code(HttpStatus.FORBIDDEN.value()).build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponseDto);
     }
 
     @Override
