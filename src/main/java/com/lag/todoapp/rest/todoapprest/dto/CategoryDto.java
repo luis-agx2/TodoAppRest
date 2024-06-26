@@ -1,21 +1,20 @@
-package com.lag.todoapp.rest.todoapprest.dto.salida;
+package com.lag.todoapp.rest.todoapprest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class RegisterSalidaDto {
+public class CategoryDto {
     private Long id;
 
-    private String username;
+    private String name;
 
-    private String email;
+    private String description;
+
+    private String color;
 }

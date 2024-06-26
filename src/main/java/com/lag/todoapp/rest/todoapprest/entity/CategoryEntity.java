@@ -28,6 +28,10 @@ public class CategoryEntity {
     @Column(name = "color")
     private String color;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

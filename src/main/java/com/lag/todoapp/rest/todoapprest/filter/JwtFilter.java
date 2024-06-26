@@ -1,5 +1,6 @@
 package com.lag.todoapp.rest.todoapprest.filter;
 
+import com.lag.todoapp.rest.todoapprest.dto.MyUserDetails;
 import com.lag.todoapp.rest.todoapprest.entity.UserEntity;
 import com.lag.todoapp.rest.todoapprest.repository.UserRepository;
 import com.lag.todoapp.rest.todoapprest.service.JwtService;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -71,13 +71,14 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    public UserDetails getUserDetailsByEmail(String email) throws UsernameNotFoundException {
+    public MyUserDetails getUserDetailsByEmail(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
         userEntity.getRoles().forEach(role -> authorityList.add(new SimpleGrantedAuthority(role.getRole().name())));
 
-        return new User(
+        return new MyUserDetails(
+                userEntity.getId(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.isEnabled(),

@@ -1,4 +1,4 @@
-package com.lag.todoapp.rest.todoapprest.dto.salida;
+package com.lag.todoapp.rest.todoapprest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class LoginSalidaDto {
+public class LoginDto {
     private String jwt;
 }
