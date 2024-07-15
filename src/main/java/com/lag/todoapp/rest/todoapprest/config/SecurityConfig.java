@@ -30,12 +30,24 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/auth").permitAll()
+//                      .requestMatchers("/api/auth").access(adminAuthorizationManager())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+//    @Bean
+//    public AuthorizationManager<RequestAuthorizationContext> adminAuthorizationManager() {
+//        return new AuthorizationManager<RequestAuthorizationContext>() {
+//            @Override
+//            public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
+//                System.out.println("------------------------------->>>>>>>>");
+//                return null;
+//            }
+//        };
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

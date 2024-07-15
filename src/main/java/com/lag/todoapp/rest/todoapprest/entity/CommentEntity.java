@@ -25,7 +25,7 @@ public class CommentEntity {
     @Column(name = "message")
     private String message;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private UserEntity author;
 
