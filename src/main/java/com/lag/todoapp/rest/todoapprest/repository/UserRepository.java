@@ -9,6 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-    @Query("SELECT u FROM UserEntity u JOIN FETCH u.roles WHERE u.email = :email")
+    @Query(
+            "SELECT u FROM UserEntity u JOIN FETCH u.roles WHERE u.email = :email"
+    )
     Optional<UserEntity> findUserByEmail(String email);
 }

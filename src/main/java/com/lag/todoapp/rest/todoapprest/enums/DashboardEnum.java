@@ -2,5 +2,9 @@ package com.lag.todoapp.rest.todoapprest.enums;
 
 public enum DashboardEnum {
     GRID,
-    LIST
+    LIST;
+
+    public static DashboardEnum fromString(String value) {
+        return DashboardEnum.valueOf(value.toUpperCase());
+    }
 }
