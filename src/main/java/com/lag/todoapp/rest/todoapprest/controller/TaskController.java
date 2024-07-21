@@ -7,10 +7,9 @@ import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
 import com.lag.todoapp.rest.todoapprest.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/tasks")
@@ -23,8 +22,8 @@ public class TaskController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<TaskDto>> getAllMe() {
-        return ResponseEntity.ok(taskService.getAllMe());
+    public ResponseEntity<Page<TaskDto>> getAllMe(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(taskService.getAllMe(page, size));
     }
 
     @GetMapping("/me/{idTask}")

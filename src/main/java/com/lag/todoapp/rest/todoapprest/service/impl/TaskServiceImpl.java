@@ -14,6 +14,10 @@ import com.lag.todoapp.rest.todoapprest.repository.TaskRepository;
 import com.lag.todoapp.rest.todoapprest.repository.UserRepository;
 import com.lag.todoapp.rest.todoapprest.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +40,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> getAllMe() {
+    public Page<TaskDto> getAllMe(Integer page, Integer size) {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        List<TaskEntity> taskEntities = taskRepository.findAllByUserId(userDetails.getId());
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TaskEntity> taskResult = taskRepository.findAllByUserId(userDetails.getId(), pageable);
+        List<TaskDto> tasksDto = taskMapper.toListCategoryDto(taskResult.getContent());
 
-        return taskMapper.toListCategoryDto(taskEntities);
+        return new PageImpl<>(tasksDto, taskResult.getPageable(), taskResult.getTotalElements());
     }
 
     @Override

@@ -4,11 +4,10 @@ import com.lag.todoapp.rest.todoapprest.dto.TaskDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskUpdateDto;
 import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface TaskService {
-    List<TaskDto> getAllMe();
+    Page<TaskDto> getAllMe(Integer page, Integer size);
 
     TaskDto getOneMe(Long id) throws AccessNotGrantedException;
 
