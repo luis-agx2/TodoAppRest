@@ -33,8 +33,14 @@ public class PreferenceMapper {
         PreferenceEntity preferenceToEdit = toEntity(preferenceEntity);
 
         try {
-            mapperUpdate.addMapping(src -> ThemeEnum.fromString(src.getTheme()), PreferenceEntity::setTheme);
-            mapperUpdate.addMapping(src -> DashboardEnum.fromString(src.getDashBoardView()), PreferenceEntity::setDashBoardView);
+            mapperUpdate.addMappings(
+                    mapper -> {
+                        mapper.when(ctx -> ctx.getSource() != null).using(ctx -> ThemeEnum.fromString(ctx.getSource().toString()))
+                                .map(PreferenceUpdateDto::getTheme, PreferenceEntity::setTheme);
+                        mapper.when(ctx -> ctx.getSource() != null).using(ctx -> DashboardEnum.fromString(ctx.getSource().toString()))
+                                .map(PreferenceUpdateDto::getDashBoardView, PreferenceEntity::setDashBoardView);
+                    }
+            );
             mapperUpdate.map(preferenceUpdateDto, preferenceToEdit);
         } catch (Exception e) {
             throw new OptionNotFoundException("Not found some option of your preferences");
