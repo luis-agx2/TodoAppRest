@@ -34,4 +34,8 @@ public class CategoryEntity {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    public CategoryEntity(Long id) {
+        this.id = id;
+    }
 }
