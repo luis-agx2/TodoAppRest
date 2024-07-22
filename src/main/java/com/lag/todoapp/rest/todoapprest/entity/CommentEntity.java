@@ -1,11 +1,10 @@
 package com.lag.todoapp.rest.todoapprest.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Builder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -13,16 +12,22 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
-@Table(name = "permissions")
-public class PermissionsEntity {
+@Table(name = "comments")
+public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false, updatable = false)
-    private String name;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "message")
+    private String message;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id")
+    private UserEntity author;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

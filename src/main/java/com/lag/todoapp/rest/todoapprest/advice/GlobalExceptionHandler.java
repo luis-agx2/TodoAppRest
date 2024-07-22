@@ -2,13 +2,13 @@ package com.lag.todoapp.rest.todoapprest.advice;
 
 import com.lag.todoapp.rest.todoapprest.dto.ErrorResponseDto;
 import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
+import com.lag.todoapp.rest.todoapprest.exception.OptionNotFoundException;
 import com.lag.todoapp.rest.todoapprest.exception.RoleNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,6 +34,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .message(exception.getMessage()).code(HttpStatus.FORBIDDEN.value()).build();
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponseDto);
+    }
+
+    @ExceptionHandler(OptionNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleOptionNotFoundException(OptionNotFoundException exception) {
+        ErrorResponseDto errorResponseDto = ErrorResponseDto.builder()
+                .message(exception.getMessage()).code(HttpStatus.NOT_FOUND.value()).build();
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDto);
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.lag.todoapp.rest.todoapprest.service.impl;
 
 import com.lag.todoapp.rest.todoapprest.dto.entrada.LoginEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.RegisterEntradaDto;
-import com.lag.todoapp.rest.todoapprest.dto.salida.LoginSalidaDto;
-import com.lag.todoapp.rest.todoapprest.dto.salida.RegisterSalidaDto;
+import com.lag.todoapp.rest.todoapprest.dto.LoginDto;
+import com.lag.todoapp.rest.todoapprest.dto.RegisterDto;
 import com.lag.todoapp.rest.todoapprest.entity.RoleEntity;
 import com.lag.todoapp.rest.todoapprest.entity.UserEntity;
 import com.lag.todoapp.rest.todoapprest.enums.RoleEnum;
@@ -56,7 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginSalidaDto authenticate(LoginEntradaDto userLogin) throws Exception {
+    public LoginDto authenticate(LoginEntradaDto userLogin) throws Exception {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 userLogin.getEmail(),
                 userLogin.getPassword()
@@ -68,14 +68,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserDetails userDetails = buildUserDetails(userEntity);
         String jwtToken = jwtService.generateToken(userDetails);
 
-        return LoginSalidaDto.builder()
+        return LoginDto.builder()
                 .jwt(jwtToken)
                 .build();
     }
 
     @Override
     @Transactional
-    public RegisterSalidaDto registerUser(RegisterEntradaDto userRegister) throws Exception {
+    public RegisterDto registerUser(RegisterEntradaDto userRegister) throws Exception {
         UserEntity user = buildUserToRegister(userRegister);
         UserEntity createdUser = userRepository.save(user);
 

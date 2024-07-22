@@ -1,7 +1,6 @@
 package com.lag.todoapp.rest.todoapprest.mapper;
 
-import com.lag.todoapp.rest.todoapprest.dto.entrada.RegisterEntradaDto;
-import com.lag.todoapp.rest.todoapprest.dto.salida.RegisterSalidaDto;
+import com.lag.todoapp.rest.todoapprest.dto.RegisterDto;
 import com.lag.todoapp.rest.todoapprest.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -11,12 +10,12 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
     private final ModelMapper modelMapper = new ModelMapper();
 
-    public RegisterSalidaDto toRegisterSalidaDto(UserEntity userEntity) {
-        TypeMap<UserEntity, RegisterSalidaDto> mapper = modelMapper.createTypeMap(UserEntity.class, RegisterSalidaDto.class);
+    public RegisterDto toRegisterSalidaDto(UserEntity userEntity) {
+        TypeMap<UserEntity, RegisterDto> mapper = modelMapper.createTypeMap(UserEntity.class, RegisterDto.class);
 
-        mapper.addMapping(UserEntity::getId, RegisterSalidaDto::setId);
-        mapper.addMapping(UserEntity::getUserName, RegisterSalidaDto::setUsername);
-        mapper.addMapping(UserEntity::getEmail, RegisterSalidaDto::setEmail);
+        mapper.addMapping(UserEntity::getId, RegisterDto::setId);
+        mapper.addMapping(UserEntity::getUserName, RegisterDto::setUsername);
+        mapper.addMapping(UserEntity::getEmail, RegisterDto::setEmail);
 
         return mapper.map(userEntity);
     }
