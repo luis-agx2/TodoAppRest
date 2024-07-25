@@ -4,6 +4,7 @@ import com.lag.todoapp.rest.todoapprest.dto.TaskDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskUpdateDto;
 import com.lag.todoapp.rest.todoapprest.entity.TaskEntity;
+import com.lag.todoapp.rest.todoapprest.exception.OptionNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
@@ -50,11 +51,14 @@ public class TaskMapper {
         return modelMapper.map(taskEntity, TaskEntity.class);
     }
 
-    public TaskEntity toEntytiForEdit(TaskEntity taskEntity, TaskUpdateDto taskUpdateDto) {
+    public TaskEntity toEntytiForEdit(TaskEntity taskEntity, TaskUpdateDto taskUpdateDto) throws OptionNotFoundException {
         TaskEntity taskToEdit = toEntity(taskEntity);
 
-        modelMapper.map(taskUpdateDto, taskToEdit);
-
+        try {
+            modelMapper.map(taskUpdateDto, taskToEdit);
+        } catch (Exception e) {
+            throw new OptionNotFoundException("Not found some option of your preferences");
+        }
         return taskToEdit;
     }
 }
