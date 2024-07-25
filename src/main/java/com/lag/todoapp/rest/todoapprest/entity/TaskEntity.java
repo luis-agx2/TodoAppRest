@@ -1,5 +1,6 @@
 package com.lag.todoapp.rest.todoapprest.entity;
 
+import com.lag.todoapp.rest.todoapprest.enums.TaskStatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,10 @@ public class TaskEntity {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private TaskStatusEnum status;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -3,10 +3,10 @@ package com.lag.todoapp.rest.todoapprest.mapper;
 import com.lag.todoapp.rest.todoapprest.dto.PreferenceDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.PreferenceUpdateDto;
 import com.lag.todoapp.rest.todoapprest.entity.PreferenceEntity;
-import com.lag.todoapp.rest.todoapprest.enums.DashboardEnum;
-import com.lag.todoapp.rest.todoapprest.enums.ThemeEnum;
+import com.lag.todoapp.rest.todoapprest.enums.TaskStatusEnum;
 import com.lag.todoapp.rest.todoapprest.exception.OptionNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
@@ -33,14 +33,15 @@ public class PreferenceMapper {
         PreferenceEntity preferenceToEdit = toEntity(preferenceEntity);
 
         try {
-            mapperUpdate.addMappings(
-                    mapper -> {
-                        mapper.when(ctx -> ctx.getSource() != null).using(ctx -> ThemeEnum.fromString(ctx.getSource().toString()))
-                                .map(PreferenceUpdateDto::getTheme, PreferenceEntity::setTheme);
-                        mapper.when(ctx -> ctx.getSource() != null).using(ctx -> DashboardEnum.fromString(ctx.getSource().toString()))
-                                .map(PreferenceUpdateDto::getDashBoardView, PreferenceEntity::setDashBoardView);
-                    }
-            );
+            modelMapper.addMappings(new PropertyMap<>() {
+                @Override
+                protected void configure() {
+                    // Define mapping for theme
+                    when(ctx -> ctx.getSource() != null)
+                            .using(ctx -> TaskStatusEnum.fromString(ctx.getSource().toString()));
+                }
+            });
+
             mapperUpdate.map(preferenceUpdateDto, preferenceToEdit);
         } catch (Exception e) {
             throw new OptionNotFoundException("Not found some option of your preferences");

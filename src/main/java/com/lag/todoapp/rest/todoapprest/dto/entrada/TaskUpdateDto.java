@@ -14,6 +14,8 @@ public class TaskUpdateDto {
 
     private String description;
 
+    private String status;
+
     private LocalDate startDate;
 
     private LocalDate endDate;

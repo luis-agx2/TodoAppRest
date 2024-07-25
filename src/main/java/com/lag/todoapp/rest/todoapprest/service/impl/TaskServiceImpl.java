@@ -7,7 +7,9 @@ import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskUpdateDto;
 import com.lag.todoapp.rest.todoapprest.entity.CategoryEntity;
 import com.lag.todoapp.rest.todoapprest.entity.TaskEntity;
 import com.lag.todoapp.rest.todoapprest.entity.UserEntity;
+import com.lag.todoapp.rest.todoapprest.enums.TaskStatusEnum;
 import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
+import com.lag.todoapp.rest.todoapprest.exception.OptionNotFoundException;
 import com.lag.todoapp.rest.todoapprest.mapper.TaskMapper;
 import com.lag.todoapp.rest.todoapprest.repository.CategoryRepository;
 import com.lag.todoapp.rest.todoapprest.repository.TaskRepository;
@@ -73,13 +75,14 @@ public class TaskServiceImpl implements TaskService {
         TaskEntity tasktoCreate = taskMapper.toEntity(taskEntradaDto);
         tasktoCreate.setUser(userEntity);
         tasktoCreate.setCategory(categoryEntity);
+        tasktoCreate.setStatus(TaskStatusEnum.NEW);
         tasktoCreate.setCreatedAt(LocalDateTime.now());
 
         return taskMapper.toDto(taskRepository.save(tasktoCreate));
     }
 
     @Override
-    public TaskDto updateMe(Long taskId, TaskUpdateDto taskUpdateDto) throws AccessNotGrantedException {
+    public TaskDto updateMe(Long taskId, TaskUpdateDto taskUpdateDto) throws AccessNotGrantedException, OptionNotFoundException {
         MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         TaskEntity taskEntity = taskRepository.findById(taskId).orElseThrow(() -> new AccessNotGrantedException("Forbidden"));

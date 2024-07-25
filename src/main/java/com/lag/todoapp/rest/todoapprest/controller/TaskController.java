@@ -4,6 +4,7 @@ import com.lag.todoapp.rest.todoapprest.dto.TaskDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskUpdateDto;
 import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
+import com.lag.todoapp.rest.todoapprest.exception.OptionNotFoundException;
 import com.lag.todoapp.rest.todoapprest.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class TaskController {
     }
 
     @PutMapping("/me/{idTask}")
-    public ResponseEntity<TaskDto> updateMe(@PathVariable Long idTask, @RequestBody TaskUpdateDto taskUpdateDto) throws AccessNotGrantedException {
+    public ResponseEntity<TaskDto> updateMe(@PathVariable Long idTask, @RequestBody TaskUpdateDto taskUpdateDto) throws AccessNotGrantedException, OptionNotFoundException {
         return ResponseEntity.ok(taskService.updateMe(idTask, taskUpdateDto));
     }
 
