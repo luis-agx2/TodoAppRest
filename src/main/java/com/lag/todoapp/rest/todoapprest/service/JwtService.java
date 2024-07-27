@@ -5,10 +5,11 @@ import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public interface JwtService {
-    public String generateToken(UserDetails userDetails, UserDetailEntity userDetailEntity);
+    public String generateToken(UserDetails userDetails, Optional<UserDetailEntity> userDetailEntity);
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails);
 
