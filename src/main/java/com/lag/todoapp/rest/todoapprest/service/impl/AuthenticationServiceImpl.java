@@ -5,12 +5,14 @@ import com.lag.todoapp.rest.todoapprest.dto.entrada.RegisterEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.LoginDto;
 import com.lag.todoapp.rest.todoapprest.dto.RegisterDto;
 import com.lag.todoapp.rest.todoapprest.entity.RoleEntity;
+import com.lag.todoapp.rest.todoapprest.entity.UserDetailEntity;
 import com.lag.todoapp.rest.todoapprest.entity.UserEntity;
 import com.lag.todoapp.rest.todoapprest.enums.RoleEnum;
 import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
 import com.lag.todoapp.rest.todoapprest.exception.RoleNotFoundException;
 import com.lag.todoapp.rest.todoapprest.mapper.UserMapper;
 import com.lag.todoapp.rest.todoapprest.repository.RoleRepository;
+import com.lag.todoapp.rest.todoapprest.repository.UserDetailRepository;
 import com.lag.todoapp.rest.todoapprest.repository.UserRepository;
 import com.lag.todoapp.rest.todoapprest.service.AuthenticationService;
 import com.lag.todoapp.rest.todoapprest.service.JwtService;
@@ -36,6 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final UserDetailRepository userDetailRepository;
     private final UserMapper userMapper;
 
     @Autowired
@@ -45,6 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             UserRepository userRepository,
+            UserDetailRepository userDetailRepository,
             UserMapper userMapper
     ) {
         this.authenticationManager = authenticationManager;
@@ -52,6 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
+        this.userDetailRepository = userDetailRepository;
         this.userMapper = userMapper;
     }
 
@@ -66,7 +71,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not fond"));
 
         UserDetails userDetails = buildUserDetails(userEntity);
-        String jwtToken = jwtService.generateToken(userDetails);
+        UserDetailEntity details = userDetailRepository.findById(userEntity.getId()).orElseThrow();
+        String jwtToken = jwtService.generateToken(userDetails, details);
 
         return LoginDto.builder()
                 .jwt(jwtToken)

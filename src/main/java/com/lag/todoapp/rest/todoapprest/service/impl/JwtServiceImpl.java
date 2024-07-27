@@ -1,5 +1,6 @@
 package com.lag.todoapp.rest.todoapprest.service.impl;
 
+import com.lag.todoapp.rest.todoapprest.entity.UserDetailEntity;
 import com.lag.todoapp.rest.todoapprest.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,10 +18,11 @@ public class JwtServiceImpl implements JwtService {
     private static final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, UserDetailEntity userDetailEntity) {
         Map<String, Object> extraClaims = new HashMap<>();
 
         extraClaims.put("authorities", userDetails.getAuthorities());
+        extraClaims.put("username", userDetailEntity.getFirstName() + " " + userDetailEntity.getLastNames());
 
         return generateToken(extraClaims, userDetails);
     }
