@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -71,7 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not fond"));
 
         UserDetails userDetails = buildUserDetails(userEntity);
-        UserDetailEntity details = userDetailRepository.findById(userEntity.getId()).orElseThrow();
+        Optional<UserDetailEntity> details = userDetailRepository.findById(userEntity.getId());
         String jwtToken = jwtService.generateToken(userDetails, details);
 
         return LoginDto.builder()

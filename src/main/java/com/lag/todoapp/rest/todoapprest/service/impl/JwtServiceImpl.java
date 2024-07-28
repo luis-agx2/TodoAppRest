@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -18,11 +19,15 @@ public class JwtServiceImpl implements JwtService {
     private static final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 
     @Override
-    public String generateToken(UserDetails userDetails, UserDetailEntity userDetailEntity) {
+    public String generateToken(UserDetails userDetails, Optional<UserDetailEntity> userDetailEntity) {
         Map<String, Object> extraClaims = new HashMap<>();
 
         extraClaims.put("authorities", userDetails.getAuthorities());
-        extraClaims.put("username", userDetailEntity.getFirstName() + " " + userDetailEntity.getLastNames());
+        extraClaims.put("name", null);
+
+        userDetailEntity.ifPresent(details ->
+            extraClaims.put("name", details.getFirstName() + " " + details.getLastNames())
+        );
 
         return generateToken(extraClaims, userDetails);
     }
