@@ -22,13 +22,13 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<List<CommentDto>> getAllMe() {
-        return ResponseEntity.ok(commentService.getAllByUserId());
+    @GetMapping("/me/{taskId}")
+    public ResponseEntity<List<CommentDto>> getAllMe(@PathVariable Long taskId) throws AccessNotGrantedException {
+        return ResponseEntity.ok(commentService.getAllByTaskId(taskId));
     }
 
     @PostMapping("/me")
-    public ResponseEntity<CommentDto> createMe(@Valid @RequestBody CommentEntradaDto commentEntradaDto) {
+    public ResponseEntity<CommentDto> createMe(@Valid @RequestBody CommentEntradaDto commentEntradaDto) throws AccessNotGrantedException {
         return ResponseEntity.ok(commentService.createMe(commentEntradaDto));
     }
 

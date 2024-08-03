@@ -29,6 +29,10 @@ public class CommentEntity {
     @JoinColumn(name = "user_id")
     private UserEntity author;
 
+    @ManyToOne(fetch =  FetchType.LAZY, cascade =  CascadeType.PERSIST)
+    @JoinColumn(name = "task_id")
+    private TaskEntity task;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }
