@@ -1,6 +1,7 @@
 package com.lag.todoapp.rest.todoapprest.service.impl;
 
 import com.lag.todoapp.rest.todoapprest.dto.MyUserDetails;
+import com.lag.todoapp.rest.todoapprest.dto.TaskDashboardDto;
 import com.lag.todoapp.rest.todoapprest.dto.TaskDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskUpdateDto;
@@ -50,6 +51,19 @@ public class TaskServiceImpl implements TaskService {
         List<TaskDto> tasksDto = taskMapper.toListCategoryDto(taskResult.getContent());
 
         return new PageImpl<>(tasksDto, taskResult.getPageable(), taskResult.getTotalElements());
+    }
+
+    @Override
+    public TaskDashboardDto getAllMeDashboard() {
+        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return TaskDashboardDto.builder()
+                .news(taskMapper.toListCategoryDto(taskRepository.findAllByStatusAndUserId(TaskStatusEnum.NEW, userDetails.getId())))
+                .inProgress(taskMapper.toListCategoryDto(taskRepository.findAllByStatusAndUserId(TaskStatusEnum.IN_PROGRESS, userDetails.getId())))
+                .paused(taskMapper.toListCategoryDto(taskRepository.findAllByStatusAndUserId(TaskStatusEnum.PAUSE, userDetails.getId())))
+                .cancelled(taskMapper.toListCategoryDto(taskRepository.findAllByStatusAndUserId(TaskStatusEnum.CANCELED, userDetails.getId())))
+                .completed(taskMapper.toListCategoryDto(taskRepository.findAllByStatusAndUserId(TaskStatusEnum.COMPLETED, userDetails.getId())))
+                .build();
     }
 
     @Override
