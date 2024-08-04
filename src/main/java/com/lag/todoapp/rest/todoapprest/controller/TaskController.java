@@ -1,5 +1,6 @@
 package com.lag.todoapp.rest.todoapprest.controller;
 
+import com.lag.todoapp.rest.todoapprest.dto.TaskDashboardDto;
 import com.lag.todoapp.rest.todoapprest.dto.TaskDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskEntradaDto;
 import com.lag.todoapp.rest.todoapprest.dto.entrada.TaskUpdateDto;
@@ -25,6 +26,11 @@ public class TaskController {
     @GetMapping("/me")
     public ResponseEntity<Page<TaskDto>> getAllMe(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         return ResponseEntity.ok(taskService.getAllMe(page, size));
+    }
+
+    @GetMapping("/me/dashboard")
+    public ResponseEntity<TaskDashboardDto> getMeDashboard() {
+        return ResponseEntity.ok(taskService.getAllMeDashboard());
     }
 
     @GetMapping("/me/{idTask}")

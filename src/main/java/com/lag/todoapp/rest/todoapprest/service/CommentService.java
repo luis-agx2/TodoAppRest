@@ -8,9 +8,9 @@ import com.lag.todoapp.rest.todoapprest.exception.AccessNotGrantedException;
 import java.util.List;
 
 public interface CommentService {
-    List<CommentDto> getAllByUserId();
+    List<CommentDto> getAllByTaskId(Long taskId) throws AccessNotGrantedException;
 
-    CommentDto createMe(CommentEntradaDto commentEntradaDto);
+    CommentDto createMe(CommentEntradaDto commentEntradaDto) throws AccessNotGrantedException;
 
     CommentDto updateMe(CommentUpdateDto commentUpdateDto, Long commentId) throws AccessNotGrantedException;
 
